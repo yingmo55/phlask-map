@@ -1,4 +1,5 @@
 import * as firebase from "firebase";
+import GeofireTaps from './firebase/geofireTaps'
 
 export const SET_TOGGLE_STATE = "SET_TOGGLE_STATE";
 export const setToggleState = (toggle, toggleState) => ({
@@ -22,6 +23,33 @@ export const getTapsSuccess = allTaps => ({
   type: GET_TAPS_SUCCESS,
   allTaps
 });
+
+export const ADD_NEARBY_TAP = "ADD_NEARBY_TAP";
+export const addNearbyTap = (id, tap) => ({
+  type: ADD_NEARBY_TAP,
+  id,
+  tap
+});
+
+export const REMOVE_NEARBY_TAP = "REMOVE_NEARBY_TAP";
+export const removeNearbyTap = id => ({
+  type: REMOVE_NEARBY_TAP,
+  id
+});
+
+export const getTap = id => dispatch => {
+  console.log("getting tap...")
+  firebase.database().ref(id).once("value").then(snapshot => {
+    var tap = snapshot.val();
+    dispatch(addNearbyTap(id, tap));
+  })
+}
+
+export const getNearbyTaps = (currentLocation, radius) => {
+  return function (dispatch) {
+    GeofireTaps.getInstance().query(currentLocation, radius, dispatch(getTap))
+  }
+}
 
 export const getTaps = () => dispatch => {
   return firebase

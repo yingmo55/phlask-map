@@ -5,11 +5,12 @@ import SearchBar from "./SearchBar";
 import "./ReactGoogleMaps.css";
 import { connect } from "react-redux";
 import SelectedTap from './SelectedTap'
-import { getTaps, setFilterFunction, toggleInfoWindow, setMapCenter } from "../actions";
+import { getTap, setFilterFunction, toggleInfoWindow, setMapCenter, removeNearbyTap } from "../actions";
 // import Legend from "./Legend";
 import Filter from "./Filter";
 import { Spinner } from "react-bootstrap";
 import MapMarkers from "./MapMarkers"
+import GeofireTaps from "../firebase/geofireTaps";
 
 // Actual Magic: https://stackoverflow.com/a/41337005
 // Distance calculates the distance between two lat/lon pairs
@@ -133,8 +134,8 @@ export class ReactGoogleMaps extends Component {
       showingInfoWindow: false,
       activeMarker: {},
       selectedPlace: {},
-      currlat: this.props.mapCenter.lat, // 39.9528,
-      currlon: this.props.mapCenter.lng, //-75.1635,
+      // currlat: this.props.mapCenter.lat, // 39.9528,
+      // currlon: this.props.mapCenter.lng, //-75.1635,
       closestTap: {},
       taps: [],
       tapsLoaded: false,
@@ -143,47 +144,51 @@ export class ReactGoogleMaps extends Component {
       zoom: 16
     };
   }
-
-  // UNSAFE_componentWillReceiveProps(nextProps) {
-  //     this.setState({
-  //       unfilteredTaps: nextProps.tapsDisplayed
-  //     });
-  // }
   
-  componentDidUpdate(prevProps){
-    if(prevProps !== this.props){
-      this.setState({
-        unfilteredTaps: prevProps.tapsDisplayed
-      });
-      if (this.state.currlat !== this.props.mapCenter.lat || this.state.currlon !== this.props.mapCenter.lng){
-        this.setState({
-          currlat: this.props.mapCenter.lat,
-          currlon: this.props.mapCenter.lng
-        })
-      }
-    }
-  }
+  // componentDidUpdate(prevProps){
+  //   if(prevProps !== this.props){
+  //     this.setState({
+  //       unfilteredTaps: prevProps.tapsDisplayed
+  //     });
+  //     if (this.state.currlat !== this.props.mapCenter.lat || this.state.currlon !== this.props.mapCenter.lng){
+  //       this.setState({
+  //         currlat: this.props.mapCenter.lat,
+  //         currlon: this.props.mapCenter.lng
+  //       })
+  //     }
+  //   }
+  // }
   
   componentDidMount() {
 
     getCoordinates().then(position => {
       if (isNaN(position.coords.latitude) || isNaN(position.coords.longitude)) {
-        this.setState({ 
-          currlat: parseFloat("39.952744"),
-          currlon: parseFloat("-75.163500")
-        });
+        // this.setState({ 
+        //   currlat: parseFloat("39.952744"),
+        //   currlon: parseFloat("-75.163500")
+        // });
+        console.log("User coordinates not found. Using default map center.")
       } else {
-        this.setState({ 
-          currlat: position.coords.latitude,
-          currlon: position.coords.longitude
-         });
+        // this.setState({ 
+        //   currlat: position.coords.latitude,
+        //   currlon: position.coords.longitude
+        //  });
+        this.props.setMapCenter({
+          lat: position.coords.latitude,
+          lng: position.coords.longitude
+        });
       }
     }, ()=>{
-      this.props.setMapCenter({
-        lat: getLat(),
-        lon: getLon()
-      })
+      console.log("User coordinates not found. Using default map center.")
+      // this.props.setMapCenter({
+      //   lat: getLat(),
+      //   lon: getLon()
+      // })
     });
+
+    // lat: this.props.mapCenter.lat,
+    //           lng: this.props.mapCenter.lng
+    GeofireTaps.getInstance().query([this.props.mapCenter.lat, this.props.mapCenter.lng], 5, this.props.getTap, this.props.removeNearbyTap);
   }
 
   showInfoWindow(){
@@ -228,6 +233,15 @@ export class ReactGoogleMaps extends Component {
     this.setState({ currlat: location.lat, currlon: location.lng, zoom: 16 });
   };
 
+
+  centerMoved = (mapProps, map) => {
+    GeofireTaps.getInstance().query([map.getCenter().lat(), map.getCenter().lng()], 5, this.props.getTap, this.props.removeNearbyTap)
+    this.props.setMapCenter({
+      lat: map.getCenter().lat(),
+      lng: map.getCenter().lng()
+    })
+  };
+
   render() {
       return (
         <div id='react-google-map'>
@@ -237,11 +251,19 @@ export class ReactGoogleMaps extends Component {
             className={"map"}
             style={style}
             zoom={this.state.zoom}
+            onDragend={this.centerMoved}
             initialCenter={{
-              lat: this.state.currlat,
-              lng: this.state.currlon
+              // lat: this.state.currlat,
+              // lng: this.state.currlon
+              lat: this.props.mapCenter.lat,
+              lng: this.props.mapCenter.lng
             }}
-            center={{ lat: this.state.currlat, lng: this.state.currlon }}
+            center={{
+              // lat: this.state.currlat,
+              // lng: this.state.currlon
+              lat: this.props.mapCenter.lat,
+              lng: this.props.mapCenter.lng
+            }}
           >
 
             <Filter/>
@@ -251,7 +273,12 @@ export class ReactGoogleMaps extends Component {
             <MapMarkers 
               map={this.props.map}
               google={this.props.google}
-              mapCenter={{ lat: this.state.currlat, lng: this.state.currlon }}
+              mapCenter={{
+                // lat: this.state.currlat,
+                // lng: this.state.currlon 
+                lat: this.props.mapCenter.lat,
+                lng: this.props.mapCenter.lng
+              }}
             />
           </Map>
             <div className="search-bar-container">
@@ -286,7 +313,7 @@ const mapStateToProps = state => ({
   // infoIsExpanded: state.infoIsExpanded
 });
 
-const mapDispatchToProps = { getTaps, setFilterFunction, toggleInfoWindow, setMapCenter };
+const mapDispatchToProps = { getTap, removeNearbyTap, setFilterFunction, toggleInfoWindow, setMapCenter };
 
 export default connect(mapStateToProps,mapDispatchToProps)(
   GoogleApiWrapper({

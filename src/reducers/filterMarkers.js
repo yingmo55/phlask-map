@@ -1,5 +1,6 @@
 import * as actions from "../actions";
 import { isMobile } from 'react-device-detect'
+import _ from "lodash"
 
 const initialState = {
   mapCenter: {
@@ -20,7 +21,8 @@ const initialState = {
     accessTypesHidden: []
   },
   allTaps: [],
-  selectedPlace: {}
+  selectedPlace: {},
+  nearbyTaps: {}
 };
 
 export default (state = initialState, act) => {
@@ -56,7 +58,17 @@ export default (state = initialState, act) => {
     case actions.SET_SELECTED_PLACE:
       // console.log('Selected Place: ' + act.selectedPlace.organization);
       return { ...state, selectedPlace: act.selectedPlace}
-      
+    
+    case actions.REMOVE_NEARBY_TAP:
+      var new_remove_nearbyTaps = _.cloneDeep({...state.nearbyTaps});
+      // delete new_remove_nearbyTaps[act.id];
+      return {...state, nearbyTaps: new_remove_nearbyTaps};
+    
+    case actions.ADD_NEARBY_TAP:
+      var new_add_nearbyTaps = _.cloneDeep({...state.nearbyTaps});
+      new_add_nearbyTaps[act.id] = act.tap;
+      return {...state, nearbyTaps: new_add_nearbyTaps};
+
 
     case actions.TOGGLE_INFO_WINDOW:
       // console.log('Info Window Class: ' + state.infoWindowClass);

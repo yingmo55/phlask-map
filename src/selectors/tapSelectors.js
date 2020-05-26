@@ -6,18 +6,21 @@ const getTapFilters = (state) => state.tapFilters
 
 const getTaps = (state) => state.allTaps
 
+const nearbyTaps = (state) => state.nearbyTaps
+
 const makeGetVisibleTaps = () => {
   return createSelector(
-    [getTapFilters, getTaps],
-    (tapFilters, allTaps) => {
+    [getTapFilters, getTaps, nearbyTaps],
+    (tapFilters, allTaps, nearbyTaps) => {
       
-      let filteredTaps = allTaps
+      // let filteredTaps = allTaps
+      let filteredTaps = nearbyTaps
       // If we want to filter for filtered taps (water filter)
       if (tapFilters.filtered) {
           filteredTaps = Object.keys(filteredTaps)
-              .filter(key => allTaps[key].filtration === "Yes")
+              .filter(key => nearbyTaps[key].filtration === "Yes")
               .reduce((obj, key) => {
-              obj[key] = allTaps[key];
+              obj[key] = nearbyTaps[key];
               return obj;
               }, []);
       }
