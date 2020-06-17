@@ -27,7 +27,7 @@ const initialState = {
     accessTypesHidden: []
   },
   allTaps: [],
-  nearbyTaps: {}
+  nearbyTaps: {},
   allFoodOrgs: [],
   selectedPlace: {},
   phlaskType: actions.PHLASK_TYPE_WATER

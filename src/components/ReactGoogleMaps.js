@@ -5,7 +5,8 @@ import SearchBar from "./SearchBar";
 import "./ReactGoogleMaps.css";
 import { connect } from "react-redux";
 import SelectedTap from './SelectedTap'
-import { getTaps,
+import { getTap,
+  removeNearbyTap,
   setFilterFunction,
   toggleInfoWindow,
   setMapCenter,
