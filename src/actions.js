@@ -37,8 +37,13 @@ export const removeNearbyTap = id => ({
   id
 });
 
+export const preloadTap = id => dispatch => {
+  console.log("preloadingTap")
+}
+
 export const getTap = id => dispatch => {
   console.log("getting tap...")
+
   firebase.database().ref(id).once("value").then(snapshot => {
     var tap = snapshot.val();
     dispatch(addNearbyTap(id, tap));

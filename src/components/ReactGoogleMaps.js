@@ -125,6 +125,24 @@ const style = {
   position: "relative"
 };
 
+function deg2rad(deg) {
+  return deg * (Math.PI/180)
+}
+
+function getDistanceFromLatLonInKm(lat1,lon1,lat2,lon2) {
+  var R = 6371; // Radius of the earth in km
+  var dLat = deg2rad(lat2-lat1);  // deg2rad below
+  var dLon = deg2rad(lon2-lon1); 
+  var a = 
+    Math.sin(dLat/2) * Math.sin(dLat/2) +
+    Math.cos(deg2rad(lat1)) * Math.cos(deg2rad(lat2)) * 
+    Math.sin(dLon/2) * Math.sin(dLon/2)
+    ; 
+  var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a)); 
+  var d = R * c; // Distance in km
+  return d;
+}
+
 export class ReactGoogleMaps extends Component {
   constructor(props) {
     super(props);
@@ -233,9 +251,20 @@ export class ReactGoogleMaps extends Component {
     this.setState({ currlat: location.lat, currlon: location.lng, zoom: 16 });
   };
 
-
   centerMoved = (mapProps, map) => {
-    GeofireTaps.getInstance().query([map.getCenter().lat(), map.getCenter().lng()], 5, this.props.getTap, this.props.removeNearbyTap)
+    let cornerLat = map.getBounds().getNorthEast().lat()
+    let cornerLng = map.getBounds().getNorthEast().lng()
+
+    let searchRadius = getDistanceFromLatLonInKm(map.getCenter().lat(), map.getCenter().lng(), cornerLat, cornerLng)
+
+    console.log("Search Radius")
+    console.log(searchRadius)
+
+    // TODO: Make the callback for when a tap is found add the tap ID to a list of taps in the redux state and update a state parameter to toggle a button.
+    //       This button would trigger a Firebase query for all of the IDs in the list stored in the state and add those into the nearbyTaps state object, 
+    //       as well as disable the button toggle state variable.
+    GeofireTaps.getInstance().query([map.getCenter().lat(), map.getCenter().lng()], searchRadius, this.props.getTap, this.props.removeNearbyTap)
+
     this.props.setMapCenter({
       lat: map.getCenter().lat(),
       lng: map.getCenter().lng()
