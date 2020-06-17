@@ -1,20 +1,32 @@
-import { Map, InfoWindow, GoogleApiWrapper } from "google-maps-react";
+import { Map, InfoWindow, GoogleApiWrapper, Marker } from "google-maps-react";
 import React, { Component } from "react";
 import ClosestTap from "./ClosestTap";
 import SearchBar from "./SearchBar";
 import "./ReactGoogleMaps.css";
 import { connect } from "react-redux";
 import SelectedTap from './SelectedTap'
-import { getTap, setFilterFunction, toggleInfoWindow, setMapCenter, removeNearbyTap } from "../actions";
+import { getTaps,
+  setFilterFunction,
+  toggleInfoWindow,
+  setMapCenter,
+  PHLASK_TYPE_WATER,
+  PHLASK_TYPE_FOOD } from "../actions";
 // import Legend from "./Legend";
-import Filter from "./Filter";
+import WaterFilter from "./Filter";
+import FoodFilter from "./FoodFilter";
 import { Spinner } from "react-bootstrap";
 import MapMarkers from "./MapMarkers"
 import GeofireTaps from "../firebase/geofireTaps";
+import MapMarkersFood from "./MapMarkersFood"
+// Temporary Food/Water Toggle
+import TypeToggle from './TypeToggle.js'
+import { isMobile } from "react-device-detect";
+
 
 // Actual Magic: https://stackoverflow.com/a/41337005
 // Distance calculates the distance between two lat/lon pairs
-function distance(lat1, lon1, lat2, lon2) {
+function distance(lat1,
+   lon1, lat2, lon2) {
   var p = 0.017453292519943295;
   var a =
     0.5 -
@@ -159,7 +171,8 @@ export class ReactGoogleMaps extends Component {
       tapsLoaded: false,
       unfilteredTaps: this.props.tapsDisplayed,
       filteredTaps: [],
-      zoom: 16
+      zoom: 16,
+      searchedTap: null
     };
   }
   
@@ -248,7 +261,7 @@ export class ReactGoogleMaps extends Component {
   }
 
   searchForLocation = location => {
-    this.setState({ currlat: location.lat, currlon: location.lng, zoom: 16 });
+    this.setState({ currlat: location.lat, currlon: location.lng, zoom: 16, searchedTap: {lat: location.lat, lng: location.lng} });
   };
 
   centerMoved = (mapProps, map) => {
@@ -294,21 +307,45 @@ export class ReactGoogleMaps extends Component {
               lng: this.props.mapCenter.lng
             }}
           >
+            <TypeToggle/>
 
-            <Filter/>
+          {/* FilteredTaps */}
 
-            {/* FilteredTaps */}
+          {this.props.phlaskType === PHLASK_TYPE_WATER
+            ? <WaterFilter/>
+            : <FoodFilter/>
+          }
 
-            <MapMarkers 
-              map={this.props.map}
-              google={this.props.google}
-              mapCenter={{
-                // lat: this.state.currlat,
-                // lng: this.state.currlon 
-                lat: this.props.mapCenter.lat,
-                lng: this.props.mapCenter.lng
-              }}
-            />
+          {/* Issue: MapMarkers won't render when placed inside container? */}
+          {this.props.phlaskType === PHLASK_TYPE_WATER
+            // Water
+            ? 
+              <MapMarkers 
+                map={this.props.map}
+                google={this.props.google}
+                mapCenter={{ lat: this.state.currlat, lng: this.state.currlon }}
+              />
+            
+
+            // Food
+                
+            :   
+              <MapMarkersFood 
+                map={this.props.map}
+                google={this.props.google}
+                mapCenter={{ lat: this.state.currlat, lng: this.state.currlon }}
+              />
+          }
+          
+
+            
+
+            {this.state.searchedTap != null && 
+              <Marker
+                name={"Your Search Result"}
+                position={this.state.searchedTap}
+              />
+            }
           </Map>
             <div className="search-bar-container">
               <SearchBar
@@ -337,7 +374,8 @@ const mapStateToProps = state => ({
   allTaps: state.allTaps,
   filteredTaps: state.filteredTaps,
   filterFunction: state.filterFunction,
-  mapCenter: state.mapCenter
+  mapCenter: state.mapCenter,
+  phlaskType: state.phlaskType
   // showingInfoWindow: state.showingInfoWindow,
   // infoIsExpanded: state.infoIsExpanded
 });
