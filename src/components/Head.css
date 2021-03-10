@@ -44,6 +44,14 @@
   display: contents
 }
 
+#loginButton {
+    align-self: flex-end;
+}
+
+#loginButton:hover {
+    color: #27aae1;
+}
+
 @media (min-width: 992px) {
   .navbar-brand {
     margin-right: 80px !important;

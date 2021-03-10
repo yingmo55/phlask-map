@@ -34,7 +34,8 @@ const initialState = {
   allTaps: [],
   allFoodOrgs: [],
   selectedPlace: {},
-  phlaskType: actions.PHLASK_TYPE_WATER
+  phlaskType: actions.PHLASK_TYPE_WATER,
+  userSignedIn: false
 };
 
 export default (state = initialState, act) => {
@@ -201,6 +202,12 @@ export default (state = initialState, act) => {
             ? 'info-window-out'
             : 'info-window-out-desktop'
           : state.infoWindowClass
+      }
+
+    case actions.SET_USER_SIGNED_IN:
+      return {
+        ...state,
+        userSignedIn: true
       }
     
     default:

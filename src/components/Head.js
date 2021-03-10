@@ -34,6 +34,7 @@ export class Head extends PureComponent {
                 <Nav.Link href="project">Project</Nav.Link>
                 <Nav.Link href="share">Share Water & Food</Nav.Link>
                 <Nav.Link href="contribute">Contribute</Nav.Link>
+                <Nav.Link href="login" id="loginButton">Log In</Nav.Link>
               </Nav>
             </Navbar.Collapse>
           </Navbar>

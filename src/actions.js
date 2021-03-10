@@ -161,5 +161,11 @@ export const togglePhlaskType = phlaskType => ({
   mode: phlaskType
 })
 
+export const SET_USER_SIGNED_IN = "SET_USER_SIGNED_IN"
+export const setUserSignedIn = signIn => ({
+  type: SET_USER_SIGNED_IN,
+  mode: signIn
+})
+
 export const PHLASK_TYPE_WATER = "PHLASK_TYPE_WATER"
 export const PHLASK_TYPE_FOOD = "PHLASK_TYPE_FOOD"
