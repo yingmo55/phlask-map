@@ -10,6 +10,7 @@ import store from "./store";
 import { waterConfig, foodConfig } from "./firebase/firebaseConfig";
 import * as firebase from "firebase";
 // import { resizeWindow } from './actions'
+import { Auth0Provider } from "@auth0/auth0-react";
 
 if (!firebase.length) {
   firebase.initializeApp(waterConfig);
@@ -18,25 +19,31 @@ if (!firebase.length) {
 
 // window.addEventListener('resize', resizeWindow())
 
-let basepath = ""
+let basepath = "";
 // Test-specific routing logic
-let host = window.location.host
+let host = window.location.host;
 if (host === "test.phlask.me") {
   basepath = window.location.pathname;
 }
 
 let path = window.location.hash.slice(1);
 if (path) {
-  window.location.hash = '';
-  window.history.replaceState({}, '', `${basepath}${path}`);
+  window.location.hash = "";
+  window.history.replaceState({}, "", `${basepath}${path}`);
 }
 
 ReactDOM.render(
-  <Provider store={store}>
-    <BrowserRouter basename={basepath}>
-      <App />
-    </BrowserRouter>
-  </Provider>,
+  <Auth0Provider
+    domain={process.env.REACT_APP_AUTH0_DOMAIN}
+    clientId={process.env.REACT_APP_AUTH0_CLIENTID}
+    redirectUri={window.location.origin}
+  >
+    <Provider store={store}>
+      <BrowserRouter basename={basepath}>
+        <App />
+      </BrowserRouter>
+    </Provider>
+  </Auth0Provider>,
   document.getElementById("root")
 );
 

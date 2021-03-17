@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@auth0/auth0-react": "^1.3.0",
     "@fortawesome/fontawesome-svg-core": "^1.2.30",
     "@fortawesome/free-brands-svg-icons": "^5.14.0",
     "@fortawesome/free-solid-svg-icons": "^5.14.0",
@@ -51,7 +52,7 @@
     "build": "react-scripts build",
     "test": "cypress run",
     "eject": "react-scripts eject",
-    "cypress":"cypress open",
+    "cypress": "cypress open",
     "lint": "eslint \"**/*.{js,jsx}\" --quiet",
     "format": "prettier \"src/**/*.{js,css,html}\" --write"
   },

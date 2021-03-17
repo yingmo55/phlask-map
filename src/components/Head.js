@@ -3,6 +3,8 @@ import "./Head.css";
 import logo from "./images/phlask-logo/phlask-logo.png";
 import logo2x from "./images/phlask-logo/phlask-logo@2x.png";
 import { Navbar, Nav, NavDropdown } from "react-bootstrap";
+import LoginButton from "./LoginButton/LoginButton";
+import LogoutButton from "./LogoutButton/LogoutButton";
 
 export class Head extends PureComponent {
   constructor(props) {
@@ -34,6 +36,8 @@ export class Head extends PureComponent {
                 <Nav.Link href="project">Project</Nav.Link>
                 <Nav.Link href="share">Share Water & Food</Nav.Link>
                 <Nav.Link href="contribute">Contribute</Nav.Link>
+                <LoginButton />
+                <LogoutButton />
               </Nav>
             </Navbar.Collapse>
           </Navbar>
