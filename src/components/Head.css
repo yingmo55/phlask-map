@@ -44,8 +44,14 @@
   display: contents
 }
 
-#profilePicture {
-  margin-left: auto;
+.d-flex {
+  width: 100%;
+  align-items: center;
+}
+
+.auth {
+  display: flex;
+  align-items: center;
 }
 
 @media (min-width: 992px) {

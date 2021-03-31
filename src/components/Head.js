@@ -32,19 +32,18 @@ export class Head extends PureComponent {
             {/* <img src={icon} alt="filterImg" onClick={this.display} /> */}
             <Navbar.Toggle aria-controls="basic-navbar-nav" />
             <Navbar.Collapse id="basic-navbar-nav" className="menu">
-              <Nav className="mr-auto">
+              <Nav className="d-flex">
                 <Nav.Link href="mission">Mission</Nav.Link>
                 <Nav.Link href="project">Project</Nav.Link>
                 <Nav.Link href="share">Share Water & Food</Nav.Link>
                 <Nav.Link href="contribute">Contribute</Nav.Link>
-                
-                <Nav.Link >
-                  <LoginButton />
-                  <LogoutButton />
-                </Nav.Link>
-                <Navbar.Brand>
-                  <Profile/>
-                  </Navbar.Brand>
+                <div className="ml-auto auth">
+                  <Nav.Link >
+                    <LoginButton />
+                    <LogoutButton />
+                  </Nav.Link>
+                    <Profile />
+                </div>
               </Nav>
             </Navbar.Collapse>
           </Navbar>
