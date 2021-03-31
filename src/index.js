@@ -34,8 +34,8 @@ if (path) {
 
 ReactDOM.render(
   <Auth0Provider
-    domain={process.env.REACT_APP_AUTH0_DOMAIN}
-    clientId={process.env.REACT_APP_AUTH0_CLIENTID}
+    domain="phlask.us.auth0.com"
+    clientId="Yup3kWQXjMTYyWerlSp1D9cCh43FH6XL"
     redirectUri={window.location.origin}
   >
     <Provider store={store}>
