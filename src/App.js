@@ -10,6 +10,8 @@ import Project from "./components/pages/Project";
 import Share from "./components/pages/Share";
 import Contribute from "./components/pages/Contribute";
 import Head from "./components/Head";
+import Blog from "./components/Blog/Blog";
+import BlogPost from "./components/Blog/BlogPost";
 import Div100vh from "react-div-100vh";
 
 function App(props) {
@@ -17,7 +19,6 @@ function App(props) {
   ReactGA.initialize("UA-180456355-2");
   ReactGA.pageview(window.location.pathname + window.location.search);
   return (
-
     <Div100vh>
       <div className="page-wrapper">
         <Head />
@@ -36,6 +37,12 @@ function App(props) {
           </Route>
           <Route path="/contribute">
             <Contribute />
+          </Route>
+          <Route path="/blog">
+            <Blog />
+          </Route>
+          <Route path="/post">
+            <BlogPost />
           </Route>
         </Switch>
       </div>
