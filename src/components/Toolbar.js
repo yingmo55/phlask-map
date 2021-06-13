@@ -164,6 +164,16 @@ function Toolbar(props) {
       >
         <FoodIcon />
       </button>
+      <button
+        className={`${styles.toolbarButton} ${
+          styles.bathroomsButton
+        } ${props.phlaskType !== PHLASK_TYPE_BATHROOMS && styles.disabled}`}
+        onClick={() => {
+          switchType(PHLASK_TYPE_BATHROOMS);
+        }}
+      >
+        <BathroomsIcon />
+      </button>
       <AddTapModal />
     </div>
   );
