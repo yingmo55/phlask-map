@@ -1,3 +1,4 @@
+/* eslint-disable jsx-a11y/no-noninteractive-element-interactions */
 import React from "react";
 import ReactGA from "react-ga";
 import {
@@ -128,6 +129,7 @@ function Toolbar(props) {
         isMobile ? styles.mobileToolbar : styles.desktopToolbar
       }`}
     >
+  
       {!isMobile && (
         <h3
           className={`
