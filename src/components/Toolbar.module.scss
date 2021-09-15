@@ -88,6 +88,14 @@ $foodColor: #8dc63f;
   }
 }
 
+.resourceButton {
+  color: $foodColor;
+
+  :focus {
+    box-shadow: 0 0 0 0.2rem rgba($foodColor, 0.3);
+  }
+}
+
 .filterButton {
   position: absolute;
   max-height: 40px;

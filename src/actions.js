@@ -163,3 +163,5 @@ export const togglePhlaskType = phlaskType => ({
 
 export const PHLASK_TYPE_WATER = "PHLASK_TYPE_WATER"
 export const PHLASK_TYPE_FOOD = "PHLASK_TYPE_FOOD"
+export const PHLASK_TYPE_RESOURCE = "PHLASK_TYPE_RESOURCE"
+export const PHLASK_TYPE_CONTRIBUTE = "PHLASK_TYPE_CONTRIBUTE"

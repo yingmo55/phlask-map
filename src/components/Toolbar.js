@@ -5,6 +5,8 @@ import {
   togglePhlaskType,
   PHLASK_TYPE_WATER,
   PHLASK_TYPE_FOOD,
+  PHLASK_TYPE_RESOURCE,
+  PHLASK_TYPE_CONTRIBUTE,
   setSelectedPlace,
   toggleInfoWindow,
   setMapCenter
@@ -18,6 +20,8 @@ import WaterIcon from "./icons/WaterIcon";
 import FoodIcon from "./icons/FoodIcon";
 import { isMobile } from "react-device-detect";
 import AddTapModal from "./AddTapModal";
+import PhlaskMarkerIcon from "./icons/PhlaskMarkerIcon";
+import ResourceIcon from "./icons/ResourceIcon";
 
 // Actual Magic: https://stackoverflow.com/a/41337005
 // Distance calculates the distance between two lat/lon pairs
@@ -149,6 +153,19 @@ function Toolbar(props) {
           {props.phlaskType === PHLASK_TYPE_WATER ? <Filter /> : <FoodFilter />}
         </button>
       </div>
+      
+      <button
+        className={`${styles.toolbarButton} ${
+          styles.resourceButton
+        } ${props.phlaskType !== PHLASK_TYPE_RESOURCE && styles.disabled}`}
+        onClick={() => {
+          switchType(PHLASK_TYPE_RESOURCE);
+        }}
+      >
+      <ResourceIcon/>
+      </button>
+
+
       <button
         className={`${styles.toolbarButton} ${
           styles.waterButton
@@ -172,13 +189,14 @@ function Toolbar(props) {
       <button
         className={`${styles.toolbarButton} ${
           styles.foodButton
-        } ${props.phlaskType === PHLASK_TYPE_WATER && styles.disabled}`}
+        } ${props.phlaskType !== PHLASK_TYPE_WATER && styles.disabled}`}
         onClick={() => {
           switchType(PHLASK_TYPE_FOOD);
         }}
       >
         <FoodIcon />
       </button>
+
       <AddTapModal />
     </div>
   );
@@ -195,6 +213,8 @@ const mapDispatchToProps = {
   togglePhlaskType,
   PHLASK_TYPE_FOOD,
   PHLASK_TYPE_WATER,
+  PHLASK_TYPE_RESOURCE,
+  PHLASK_TYPE_CONTRIBUTE,
   setSelectedPlace,
   toggleInfoWindow,
   setMapCenter
