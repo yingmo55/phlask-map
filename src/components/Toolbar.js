@@ -6,9 +6,7 @@ import {
   PHLASK_TYPE_WATER,
   PHLASK_TYPE_FOOD,
   PHLASK_TYPE_RESOURCE,
-  PHLASK_TYPE_FILTERS,
   PHLASK_TYPE_CONTRIBUTE,
-  PHLASK_TYPE_HOME,
   setSelectedPlace,
   toggleInfoWindow,
   setMapCenter
@@ -18,13 +16,12 @@ import Filter from "./Filter";
 import FoodFilter from "./FoodFilter";
 import styles from "./Toolbar.module.scss";
 import phlaskImg from "./images/PHLASK Button.png";
-import AddTapModal from "./AddTapModal"
+import WaterIcon from "./icons/WaterIcon";
 import FoodIcon from "./icons/FoodIcon";
-import FilterIcon from "./icons/FilterIcon";
 import { isMobile } from "react-device-detect";
+import AddTapModal from "./AddTapModal";
+import PhlaskMarkerIcon from "./icons/PhlaskMarkerIcon";
 import ResourceIcon from "./icons/ResourceIcon";
-import PhlaskFilterIcon from "./icons/PhlaskFilterIcon";
-import PhlaskIcon from "./icons/PhlaskIcon";
 
 // Actual Magic: https://stackoverflow.com/a/41337005
 // Distance calculates the distance between two lat/lon pairs
@@ -151,50 +148,55 @@ function Toolbar(props) {
           {props.phlaskType === PHLASK_TYPE_WATER ? "Water Map" : "Food Map"}
         </h3>
       )}
+      <div className={styles.filterButton}>
+        <button aria-label="show filters">
+          {props.phlaskType === PHLASK_TYPE_WATER ? <Filter /> : <FoodFilter />}
+        </button>
+      </div>
       
-      
-      {/* Resource Button */}
       <button
         className={`${styles.toolbarButton} ${
           styles.resourceButton
         } ${props.phlaskType !== PHLASK_TYPE_RESOURCE && styles.disabled}`}
         onClick={() => {
           switchType(PHLASK_TYPE_RESOURCE);
-          {/* Toggle overlay component (eventually) */}
         }}
       >
       <ResourceIcon/>
       </button>
 
-      {/* Filter Button */}
+
       <button
         className={`${styles.toolbarButton} ${
           styles.waterButton
-        } ${props.phlaskType !== PHLASK_TYPE_FILTERS && styles.disabled}`}
+        } ${props.phlaskType !== PHLASK_TYPE_WATER && styles.disabled}`}
         onClick={() => {
-          switchType(PHLASK_TYPE_FILTERS);
+          switchType(PHLASK_TYPE_WATER);
         }}
-        
       >
-        {props.phlaskType === PHLASK_TYPE_WATER ? <Filter /> : <FoodFilter />}
-
+        <WaterIcon />
       </button>
-      
-      {/* Phlask Icon*/}
+      {isMobile && (
+        <button className={styles.closestTapButton}>
+          <img
+            className="img"
+            src={phlaskImg}
+            alt=""
+            onClick={setClosest}
+          ></img>
+        </button>
+      )}
       <button
         className={`${styles.toolbarButton} ${
-          styles.toolbarButton
-        } ${props.phlaskType !== PHLASK_TYPE_HOME && styles.disabled}`}
+          styles.foodButton
+        } ${props.phlaskType !== PHLASK_TYPE_WATER && styles.disabled}`}
         onClick={() => {
-          switchType(PHLASK_TYPE_HOME);
-          // Somehow this breaks it?
-          // setClosest()
+          switchType(PHLASK_TYPE_FOOD);
         }}
       >
-        <PhlaskIcon />
+        <FoodIcon />
       </button>
 
-      {/* Should be the contribute iconology */}
       <AddTapModal />
     </div>
   );
@@ -212,8 +214,6 @@ const mapDispatchToProps = {
   PHLASK_TYPE_FOOD,
   PHLASK_TYPE_WATER,
   PHLASK_TYPE_RESOURCE,
-  PHLASK_TYPE_FILTERS,
-  PHLASK_TYPE_HOME,
   PHLASK_TYPE_CONTRIBUTE,
   setSelectedPlace,
   toggleInfoWindow,
