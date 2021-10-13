@@ -17,6 +17,7 @@ import MapMarkersFood from "./MapMarkersFood"
 // Temporary Food/Water Toggle
 import { isMobile } from "react-device-detect";
 import Toolbar from './Toolbar'
+import TypeToggle from './TypeToggle'
 
 
 // // Actual Magic: https://stackoverflow.com/a/41337005
@@ -153,8 +154,12 @@ export class ReactGoogleMaps extends Component {
       unfilteredTaps: this.props.tapsDisplayed,
       filteredTaps: [],
       zoom: 16,
-      searchedTap: null
+      searchedTap: null,
+      viewResources: false
     };
+
+    this.updateResourceModalVisibility = this.toggleResourceModalVisibility.bind(this);
+
   }
 
   // UNSAFE_componentWillReceiveProps(nextProps) {
@@ -175,6 +180,11 @@ export class ReactGoogleMaps extends Component {
         })
       }
     }
+  }
+
+
+  toggleResourceModalVisibility(){
+    this.setState({viewResources:!this.state.viewResources})
   }
   
   componentDidMount() {
@@ -260,6 +270,16 @@ export class ReactGoogleMaps extends Component {
     
       return (
         <div id="react-google-map" className={styles.mapContainer}>
+          
+          {this.state.viewResources ? 
+              <div>
+                viewResources is true
+              </div>
+              : null
+
+
+              }
+          
           {/* <ClosestTap/> */}
           <ReactTouchEvents onTap={this.handleTap.bind(this)}>
             <div>
@@ -280,7 +300,7 @@ export class ReactGoogleMaps extends Component {
                 center={{ lat: this.state.currlat, lng: this.state.currlon }}
               >
                 {/* <TypeToggle/> */}
-
+                <TypeToggle/>
               {/* FilteredTaps */}
 
               {/* {this.props.phlaskType === PHLASK_TYPE_WATER
@@ -309,7 +329,8 @@ export class ReactGoogleMaps extends Component {
                   />
               }
               
-
+              
+              
                 
 
                 {this.state.searchedTap != null && 
@@ -327,7 +348,8 @@ export class ReactGoogleMaps extends Component {
                 search={location => this.searchForLocation(location)}
               />
             </div>
-            <Toolbar/>
+            {/* */}
+            <Toolbar resourceToggleHandler={this.toggleResourceModalVisibility.bind(this)}/>
             <SelectedTap></SelectedTap>
         </div>
       );

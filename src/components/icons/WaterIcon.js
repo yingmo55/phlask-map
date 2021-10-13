@@ -8,7 +8,7 @@ const WaterIcon = ({ color = "currentColor" }) => {
       xmlns="http://www.w3.org/2000/svg"
       viewBox="0 0 233 233"
       style={{
-      width: 'auto',
+      width: '90px',
       height: 'auto'
       }
     }

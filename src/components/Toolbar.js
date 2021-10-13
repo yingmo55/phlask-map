@@ -159,7 +159,7 @@ function Toolbar(props) {
           styles.resourceButton
         } ${props.phlaskType !== PHLASK_TYPE_RESOURCE && styles.disabled}`}
         onClick={() => {
-          switchType(PHLASK_TYPE_RESOURCE);
+          props.resourceToggleHandler();
         }}
       >
       <ResourceIcon/>
@@ -172,10 +172,13 @@ function Toolbar(props) {
         } ${props.phlaskType !== PHLASK_TYPE_WATER && styles.disabled}`}
         onClick={() => {
           switchType(PHLASK_TYPE_WATER);
+          props.resourceToggleHandler(false);
         }}
       >
         <WaterIcon />
       </button>
+
+
       {isMobile && (
         <button className={styles.closestTapButton}>
           <img
@@ -186,16 +189,6 @@ function Toolbar(props) {
           ></img>
         </button>
       )}
-      <button
-        className={`${styles.toolbarButton} ${
-          styles.foodButton
-        } ${props.phlaskType !== PHLASK_TYPE_WATER && styles.disabled}`}
-        onClick={() => {
-          switchType(PHLASK_TYPE_FOOD);
-        }}
-      >
-        <FoodIcon />
-      </button>
 
       <AddTapModal />
     </div>
