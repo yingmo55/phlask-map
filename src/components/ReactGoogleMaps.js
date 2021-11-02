@@ -18,6 +18,7 @@ import MapMarkersFood from "./MapMarkersFood"
 import { isMobile } from "react-device-detect";
 import Toolbar from './Toolbar'
 import TypeToggle from './TypeToggle'
+import ResourceSelector from './ResourceSelector'
 
 
 // // Actual Magic: https://stackoverflow.com/a/41337005
@@ -271,14 +272,8 @@ export class ReactGoogleMaps extends Component {
       return (
         <div id="react-google-map" className={styles.mapContainer}>
           
-          {this.state.viewResources ? 
-              <div>
-                viewResources is true
-              </div>
-              : null
-
-
-              }
+          {this.state.viewResources ? <ResourceSelector resourceToggleHandler={this.toggleResourceModalVisibility.bind(this)}/>: 
+          null}
           
           {/* <ClosestTap/> */}
           <ReactTouchEvents onTap={this.handleTap.bind(this)}>

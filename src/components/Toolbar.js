@@ -172,7 +172,7 @@ function Toolbar(props) {
         } ${props.phlaskType !== PHLASK_TYPE_WATER && styles.disabled}`}
         onClick={() => {
           switchType(PHLASK_TYPE_WATER);
-          props.resourceToggleHandler(false);
+          props.resourceToggleHandler();
         }}
       >
         <WaterIcon />
