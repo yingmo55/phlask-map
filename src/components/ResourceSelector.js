@@ -1,5 +1,12 @@
 import React from "react";
 import ReactGA from "react-ga";
+import { connect } from "react-redux";
+import { 
+    togglePhlaskType, 
+    PHLASK_TYPE_WATER, 
+    PHLASK_TYPE_FOOD,
+    PHLASK_TYPE_FORAGING,
+    PHLASK_TYPE_BATHROOMS } from '../actions'
 
 function ResourceSelector(props){
     return (
@@ -8,7 +15,7 @@ function ResourceSelector(props){
             <div>
                 <button 
                 onClick={() => {
-                    
+                    props.togglePhlaskType(PHLASK_TYPE_WATER)
                     props.resourceToggleHandler();
                 }}
                 
@@ -19,7 +26,7 @@ function ResourceSelector(props){
             <div>
                 <button 
                 onClick={() => {
-                    
+                    props.togglePhlaskType(PHLASK_TYPE_FOOD)
                     props.resourceToggleHandler();
                 }}>
                 FOOD</button>
@@ -29,7 +36,7 @@ function ResourceSelector(props){
             <div>
                 <button 
                 onClick={() => {
-                    
+                    props.togglePhlaskType(PHLASK_TYPE_FORAGING)
                     props.resourceToggleHandler();
                 }}
                 >FORAGING</button>
@@ -39,7 +46,7 @@ function ResourceSelector(props){
             <div>
                 <button 
                 onClick={() => {
-                    
+                    props.togglePhlaskType(PHLASK_TYPE_BATHROOMS)
                     props.resourceToggleHandler();
                 }}
                 >BATHROOMS</button>
@@ -47,4 +54,7 @@ function ResourceSelector(props){
         </div>
     );
 }
-export default ResourceSelector;
+
+const mapDispatchToProps = { togglePhlaskType, PHLASK_TYPE_FOOD, PHLASK_TYPE_WATER};
+
+export default connect(null,mapDispatchToProps)(ResourceSelector);
